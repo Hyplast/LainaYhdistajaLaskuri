@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+    <string name="current_monthly_payment">Current Monthly Payment:</string>
+    <string name="new_monthly_payment">New Monthly Payment:</string>
+    <string name="monthly_savings">Monthly Savings:</string>
+    <string name="total_interest_savings">Total Interest Savings:</string>
+    <string name="break_even_point">Break-even Point:</string>
+    <string name="closing_costs">Closing Costs (€)</string>
+    <string name="new_term">New Term (years)</string>
+    <string name="new_rate">New Rate (%)</string>
+    <string name="new_mortgage">New Mortgage</string>
+    <string name="current_term">Current Term (years)</string>
+    <string name="current_rate">Current Rate (%)</string>
+    <string name="current_balance">Current Balance (€)</string>
+    <string name="current_mortgage">Current Mortgage</string>
+    <string name="calculator_title">Mortgage Refinance Calculator</string>
+    <string name="results">Results</string>
+    <string name="months">months</string>
+</resources>

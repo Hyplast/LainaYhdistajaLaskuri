@@ -11,6 +11,25 @@ import kotlin.math.pow
 import androidx.compose.material3.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.Modifier
+import lainayhdistajalaskuri.composeapp.generated.resources.Res
+import lainayhdistajalaskuri.composeapp.generated.resources.break_even_point
+import lainayhdistajalaskuri.composeapp.generated.resources.calculator_title
+import lainayhdistajalaskuri.composeapp.generated.resources.closing_costs
+import lainayhdistajalaskuri.composeapp.generated.resources.current_balance
+import lainayhdistajalaskuri.composeapp.generated.resources.current_monthly_payment
+import lainayhdistajalaskuri.composeapp.generated.resources.current_mortgage
+import lainayhdistajalaskuri.composeapp.generated.resources.current_rate
+import lainayhdistajalaskuri.composeapp.generated.resources.current_term
+import lainayhdistajalaskuri.composeapp.generated.resources.monthly_savings
+import lainayhdistajalaskuri.composeapp.generated.resources.months
+import lainayhdistajalaskuri.composeapp.generated.resources.new_monthly_payment
+import lainayhdistajalaskuri.composeapp.generated.resources.new_mortgage
+import lainayhdistajalaskuri.composeapp.generated.resources.new_rate
+import lainayhdistajalaskuri.composeapp.generated.resources.new_term
+import lainayhdistajalaskuri.composeapp.generated.resources.results
+import lainayhdistajalaskuri.composeapp.generated.resources.total_interest_savings
+import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.stringResource
 import kotlin.math.roundToInt
 
 
@@ -36,6 +55,22 @@ data class CalculationResults(
     val breakEvenMonths: Int = 0
 )
 
+// First, let's create a data class to represent each loan
+data class Loan(
+    val balance: Double,
+    val rate: Double,
+    val term: Int
+) {
+    fun calculateMonthlyPayment(): Double {
+        val monthlyRate = rate / 12 / 100
+        val numberOfPayments = term * 12
+        return balance * (monthlyRate * (1 + monthlyRate).pow(numberOfPayments)) /
+                ((1 + monthlyRate).pow(numberOfPayments) - 1)
+    }
+}
+
+
+
 
 @Composable
 fun MortgageCalculator() {
@@ -56,23 +91,23 @@ fun MortgageCalculator() {
                     .padding(16.dp)
                     .fillMaxWidth()
             ) {
-                Text(
-                    text = "Mortgage Refinance Calculator",
-                    style = MaterialTheme.typography.titleMedium
-                )
+//                Text(
+//                    text = stringResource(Res.string.calculator_title),//"Mortgage Refinance Calculator",
+//                    style = MaterialTheme.typography.titleMedium
+//                )
 
-                Spacer(modifier = Modifier.height(16.dp))
+                //Spacer(modifier = Modifier.height(16.dp))
 
                 // Current Mortgage Section
                 Text(
-                    text = "Current Mortgage",
+                    text = stringResource(Res.string.current_mortgage),//"Current Mortgage",
                     style = MaterialTheme.typography.bodyMedium
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
 
                 NumberInput(
-                    label = "Current Balance ($)",
+                    label = stringResource(Res.string.current_balance),//"Current Balance ($)",
                     value = currentLoan.balance,
                     onValueChange = { 
                         currentLoan = currentLoan.copy(balance = it)
@@ -81,7 +116,7 @@ fun MortgageCalculator() {
                 )
 
                 NumberInput(
-                    label = "Current Rate (%)",
+                    label = stringResource(Res.string.current_rate),//"Current Rate (%)",
                     value = currentLoan.rate,
                     onValueChange = { 
                         currentLoan = currentLoan.copy(rate = it)
@@ -90,7 +125,7 @@ fun MortgageCalculator() {
                 )
 
                 NumberInput(
-                    label = "Current Term (years)",
+                    label = stringResource(Res.string.current_term),//"Current Term (years)",
                     value = currentLoan.term.toDouble(),
                     onValueChange = { 
                         currentLoan = currentLoan.copy(term = it.toInt())
@@ -102,14 +137,14 @@ fun MortgageCalculator() {
 
                 // New Mortgage Section
                 Text(
-                    text = "New Mortgage",
+                    text = stringResource(Res.string.new_mortgage),//"New Mortgage",
                     style = MaterialTheme.typography.bodyMedium
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
 
                 NumberInput(
-                    label = "New Rate (%)",
+                    label = stringResource(Res.string.new_rate),//"New Rate (%)",
                     value = newLoan.rate,
                     onValueChange = { 
                         newLoan = newLoan.copy(rate = it)
@@ -118,7 +153,7 @@ fun MortgageCalculator() {
                 )
 
                 NumberInput(
-                    label = "New Term (years)",
+                    label = stringResource(Res.string.new_term),//"New Term (years)",
                     value = newLoan.term.toDouble(),
                     onValueChange = { 
                         newLoan = newLoan.copy(term = it.toInt())
@@ -127,7 +162,7 @@ fun MortgageCalculator() {
                 )
 
                 NumberInput(
-                    label = "Closing Costs ($)",
+                    label = stringResource(Res.string.closing_costs),//"Closing Costs ($)",
                     value = newLoan.closingCosts,
                     onValueChange = { 
                         newLoan = newLoan.copy(closingCosts = it)
@@ -148,17 +183,22 @@ fun MortgageCalculator() {
                         modifier = Modifier.padding(16.dp)
                     ) {
                         Text(
-                            text = "Results",
+                            text = stringResource(Res.string.results),//"Results",
                             style = MaterialTheme.typography.titleMedium
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         //fi.infinitygrow.lainayhdistajalaskuri.ResultRow("Current Monthly Payment:", "$%.2f".format(results.currentMonthlyPayment))
-                        ResultRow("Current Monthly Payment:", "$${(results.currentMonthlyPayment * 100).roundToInt() / 100.0}")
+                        //ResultRow("Current Monthly Payment:", "$${(results.currentMonthlyPayment * 100).roundToInt() / 100.0}")
+                        ResultRow(Res.string.current_monthly_payment, "€${(results.currentMonthlyPayment * 100).roundToInt() / 100.0}")
                         //fi.infinitygrow.lainayhdistajalaskuri.ResultRow("New Monthly Payment:", "$%.2f".format(results.newMonthlyPayment))
-                        ResultRow("New Monthly Payment:", "$${(results.newMonthlyPayment * 100).roundToInt() / 100.0}")
-                        ResultRow("Monthly Savings:", "$${(results.monthlySavings * 100).roundToInt() / 100.0}")
-                        ResultRow("Total Interest Savings:", "$${(results.totalInterestSavings * 100).roundToInt() / 100.0}")
-                        ResultRow("Break-even Point:", "${results.breakEvenMonths} months")
+                        //ResultRow("New Monthly Payment:", "$${(results.newMonthlyPayment * 100).roundToInt() / 100.0}")
+                        ResultRow(Res.string.new_monthly_payment, "€${(results.newMonthlyPayment * 100).roundToInt() / 100.0}")
+                        //ResultRow("Monthly Savings:", "$${(results.monthlySavings * 100).roundToInt() / 100.0}")
+                        ResultRow(Res.string.monthly_savings, "€${(results.monthlySavings * 100).roundToInt() / 100.0}")
+                        //ResultRow("Total Interest Savings:", "$${(results.totalInterestSavings * 100).roundToInt() / 100.0}")
+                        ResultRow(Res.string.total_interest_savings, "€${(results.totalInterestSavings * 100).roundToInt() / 100.0}")
+                        //ResultRow("Break-even Point:", "${results.breakEvenMonths} months")
+                        ResultRow(Res.string.break_even_point, "${results.breakEvenMonths} ${stringResource(Res.string.months)}")
 
 
 
@@ -169,6 +209,8 @@ fun MortgageCalculator() {
                 }
             }
         }
+        Text("https://hae-lainaa.com/tietosuojaseloste/")
+        Text("Copyright © 2025 Hae-lainaa.com")
     }
 }
 
@@ -190,15 +232,22 @@ private fun NumberInput(
     )
 }
 
+//@Composable
+//fun ResultRow(label: String) {
+//    Text(StringResources.getString(label))
+//}
+
+
 @Composable
-private fun ResultRow(label: String, value: String) {
+private fun ResultRow(labelResourceId: StringResource, value: String) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 4.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text(text = label)
+        //Text(text = label)
+        Text(stringResource(labelResourceId))//StringResources.getString(label))
         Text(text = value)
     }
 }

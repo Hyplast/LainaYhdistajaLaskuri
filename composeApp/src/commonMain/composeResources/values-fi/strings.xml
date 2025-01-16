@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+    <string name="current_monthly_payment">Nykyinen kuukausierä:</string>
+    <string name="new_monthly_payment">Uusi kuukausierä:</string>
+    <string name="monthly_savings">Kuukausittainen säästö:</string>
+    <string name="total_interest_savings">Kokonaissäästö koroissa:</string>
+    <string name="break_even_point">Takaisinmaksuaika:</string>
+    <string name="closing_costs">Lainan vaihtokulut (€)</string>
+    <string name="new_term">Uusi laina-aika (vuotta)</string>
+    <string name="new_rate">Uusi korko (%)</string>
+    <string name="new_mortgage">Uusi laina</string>
+    <string name="current_term">Nykyinen laina-aika (vuotta)</string>
+    <string name="current_rate">Nykyinen korko (%)</string>
+    <string name="current_balance">Nykyinen lainamäärä (€)</string>
+    <string name="current_mortgage">Nykyinen laina</string>
+    <string name="calculator_title">Lainan yhdistämislaskuri</string>
+    <string name="results">Tulokset</string>
+    <string name="months">kuukautta</string>
+</resources>
