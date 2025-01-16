@@ -16,4 +16,11 @@
     <string name="calculator_title">Lainan yhdistämislaskuri</string>
     <string name="results">Tulokset</string>
     <string name="months">kuukautta</string>
+    <string name="years">vuotta</string>
+    <string name="loan">Laina</string>
+    <string name="balance">Määrä</string>
+    <string name="rate">Korko</string>
+    <string name="term">Laina-aika</string>
+    <string name="monthly_payment">Kuukausierä</string>
+    <string name="add_loan">Lisää Laina</string>
 </resources>

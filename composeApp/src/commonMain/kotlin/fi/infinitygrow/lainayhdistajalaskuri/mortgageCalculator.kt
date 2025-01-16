@@ -11,23 +11,30 @@ import kotlin.math.pow
 import androidx.compose.material3.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import lainayhdistajalaskuri.composeapp.generated.resources.Res
+import lainayhdistajalaskuri.composeapp.generated.resources.add_loan
+import lainayhdistajalaskuri.composeapp.generated.resources.balance
 import lainayhdistajalaskuri.composeapp.generated.resources.break_even_point
-import lainayhdistajalaskuri.composeapp.generated.resources.calculator_title
 import lainayhdistajalaskuri.composeapp.generated.resources.closing_costs
 import lainayhdistajalaskuri.composeapp.generated.resources.current_balance
 import lainayhdistajalaskuri.composeapp.generated.resources.current_monthly_payment
 import lainayhdistajalaskuri.composeapp.generated.resources.current_mortgage
 import lainayhdistajalaskuri.composeapp.generated.resources.current_rate
 import lainayhdistajalaskuri.composeapp.generated.resources.current_term
+import lainayhdistajalaskuri.composeapp.generated.resources.loan
+import lainayhdistajalaskuri.composeapp.generated.resources.monthly_payment
 import lainayhdistajalaskuri.composeapp.generated.resources.monthly_savings
 import lainayhdistajalaskuri.composeapp.generated.resources.months
 import lainayhdistajalaskuri.composeapp.generated.resources.new_monthly_payment
 import lainayhdistajalaskuri.composeapp.generated.resources.new_mortgage
 import lainayhdistajalaskuri.composeapp.generated.resources.new_rate
 import lainayhdistajalaskuri.composeapp.generated.resources.new_term
+import lainayhdistajalaskuri.composeapp.generated.resources.rate
 import lainayhdistajalaskuri.composeapp.generated.resources.results
+import lainayhdistajalaskuri.composeapp.generated.resources.term
 import lainayhdistajalaskuri.composeapp.generated.resources.total_interest_savings
+import lainayhdistajalaskuri.composeapp.generated.resources.years
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 import kotlin.math.roundToInt
@@ -69,20 +76,101 @@ data class Loan(
     }
 }
 
+// Add a function to calculate total monthly payment
+fun calculateTotalMonthlyPayment(loans: List<Loan>): Double {
+    return loans.sumOf { it.calculateMonthlyPayment() }
+}
 
+// UI for adding loans
+@Composable
+fun AddLoanForm(onAddLoan: (Loan) -> Unit) {
+    var balance by remember { mutableStateOf("") }
+    var rate by remember { mutableStateOf("") }
+    var term by remember { mutableStateOf("") }
 
+    Column {
+        OutlinedTextField(
+            value = balance,
+            onValueChange = { balance = it },
+            label = { Text(stringResource(Res.string.current_balance)) }
+        )
+        OutlinedTextField(
+            value = rate,
+            onValueChange = { rate = it },
+            label = { Text(stringResource(Res.string.current_rate)) }
+        )
+        OutlinedTextField(
+            value = term,
+            onValueChange = { term = it },
+            label = { Text(stringResource(Res.string.current_term)) }
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        Button(onClick = {
+            val loan = Loan(
+                balance = balance.toDoubleOrNull() ?: 0.0,
+                rate = rate.toDoubleOrNull() ?: 0.0,
+                term = term.toIntOrNull() ?: 0
+            )
+            onAddLoan(loan)
+            balance = ""
+            rate = ""
+            term = ""
+        }) {
+            Text(stringResource(Res.string.add_loan)) // Add Loan
+        }
+        Spacer(modifier = Modifier.height(8.dp))
+    }
+}
 
 @Composable
 fun MortgageCalculator() {
     var currentLoan by remember { mutableStateOf(CurrentLoan()) }
     var newLoan by remember { mutableStateOf(NewLoan()) }
     var results by remember { mutableStateOf(calculateResults(currentLoan, newLoan)) }
+    val currentLoans = remember { mutableStateListOf<Loan>() }
 
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp)
     ) {
+        // Display current loans
+        currentLoans.forEachIndexed { index, loan ->
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = Color(0xFFF57706)
+                )
+            ) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    //Text("Loan ${index + 1}")
+                    Text("${stringResource(Res.string.loan)}: ${index + 1}", color = Color.White)
+                    Text("${stringResource(Res.string.balance)}: €${loan.balance}")
+                    Text("${stringResource(Res.string.rate)}: ${loan.rate}%")
+                    Text("${stringResource(Res.string.term)}: ${loan.term} ${stringResource(Res.string.years)}")
+                    Text("${stringResource(Res.string.monthly_payment)}: €")
+                }
+            }
+        }
+
+        // Add new loan form
+        AddLoanForm { newLoan ->
+            currentLoans.add(newLoan)
+        }
+
+        // Display total monthly payment
+        if (currentLoans.isNotEmpty()) {
+            val totalMonthly = calculateTotalMonthlyPayment(currentLoans)
+            Text(
+                stringResource(Res.string.current_monthly_payment),
+                //"Total Monthly Payment: $",
+                style = MaterialTheme.typography.headlineSmall,
+                modifier = Modifier.padding(vertical = 16.dp)
+            )
+        }
+
         Card(
             modifier = Modifier.fillMaxWidth()
         ) {

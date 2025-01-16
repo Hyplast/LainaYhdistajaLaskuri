@@ -13,7 +13,14 @@
     <string name="current_rate">Current Rate (%)</string>
     <string name="current_balance">Current Balance (€)</string>
     <string name="current_mortgage">Current Mortgage</string>
-    <string name="calculator_title">Mortgage Refinance Calculator</string>
+    <string name="calculator_title">Loan Refinance Calculator</string>
     <string name="results">Results</string>
     <string name="months">months</string>
+    <string name="loan">Loan</string>
+    <string name="years">years</string>
+    <string name="balance">Balance</string>
+    <string name="rate">Rate</string>
+    <string name="term">Term</string>
+    <string name="monthly_payment">Monthly Payment</string>
+    <string name="add_loan">Add Loan</string>
 </resources>
